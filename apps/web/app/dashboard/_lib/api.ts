@@ -1,4 +1,8 @@
-﻿const BASE = (process.env.NEXT_PUBLIC_GATEWAY_URL || '').replace(/\/$/, '');
+﻿const RAW_BASE =
+  process.env.NEXT_PUBLIC_GATEWAY_URL ||
+  process.env.GATEWAY_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '');
+const BASE = (RAW_BASE || '').replace(/\/$/, '');
 
 export function apiUrl(path: string) {
   return BASE ? `${BASE}${path}` : path;

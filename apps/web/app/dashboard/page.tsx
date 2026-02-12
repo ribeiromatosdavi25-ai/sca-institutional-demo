@@ -1,4 +1,6 @@
-﻿import { getJson } from './_lib/api';
+﻿export const dynamic = 'force-dynamic';
+
+import { getJson } from './_lib/api';
 import { AuditLogTable, BacklogCard, DocumentSummaryCard, RiskPanel } from './_components/cards';
 
 export default async function DashboardPage() {
