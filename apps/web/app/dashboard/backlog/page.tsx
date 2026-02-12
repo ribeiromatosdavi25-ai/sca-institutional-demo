@@ -1,16 +1,33 @@
-﻿export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+﻿'use client';
 
-import { getJson } from '../_lib/api';
+import { useEffect, useState } from 'react';
+import { apiUrl } from '../_lib/api';
 import { SectionCard } from '../_components/ui';
 import { ExportButtons } from '../_components/export-buttons';
 import { RoleTag } from '../_components/role-tag';
 
-export default async function BacklogPage() {
-  const data = await getJson<any>('/api/scan-backlog', {
-    method: 'POST',
-    body: JSON.stringify({ source: 'institutional-backlog' }),
-  });
+export default function BacklogPage() {
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-demo-role': document.cookie.match(/sca_role=([^;]+)/i)?.[1] || 'Viewer',
+      };
+      const response = await fetch(apiUrl('/api/scan-backlog'), {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ source: 'institutional-backlog' }),
+      });
+      setData(await response.json());
+    };
+    run();
+  }, []);
+
+  if (!data) {
+    return <div className="text-sm text-white/70">Loading backlog...</div>;
+  }
 
   return (
     <SectionCard title="Backlog Monitor">

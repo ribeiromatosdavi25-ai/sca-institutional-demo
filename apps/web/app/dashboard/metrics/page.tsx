@@ -1,12 +1,27 @@
-﻿export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+﻿'use client';
 
-import { getJson } from '../_lib/api';
+import { useEffect, useState } from 'react';
+import { apiUrl } from '../_lib/api';
 import { SectionCard } from '../_components/ui';
 import { RoleTag } from '../_components/role-tag';
 
-export default async function MetricsPage() {
-  const data = await getJson<any>('/api/metrics-summary');
+export default function MetricsPage() {
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      const headers = {
+        'x-demo-role': document.cookie.match(/sca_role=([^;]+)/i)?.[1] || 'Viewer',
+      };
+      const response = await fetch(apiUrl('/api/metrics-summary'), { headers });
+      setData(await response.json());
+    };
+    run();
+  }, []);
+
+  if (!data) {
+    return <div className="text-sm text-white/70">Loading metrics...</div>;
+  }
 
   return (
     <SectionCard title="KPI Metrics Summary">

@@ -1,17 +1,35 @@
-﻿export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+﻿'use client';
 
-import { getJson } from './_lib/api';
+import { useEffect, useState } from 'react';
+import { apiUrl } from './_lib/api';
 import { AuditLogTable, BacklogCard, DocumentSummaryCard, RiskPanel } from './_components/cards';
 
-export default async function DashboardPage() {
-  const [backlog, risk, audit, doc, metrics] = await Promise.all([
-    getJson<any>('/api/scan-backlog', { method: 'POST', body: JSON.stringify({ source: 'institutional-demo' }) }),
-    getJson<any>('/api/risk-flag', { method: 'POST', body: JSON.stringify({ scope: 'council-operations' }) }),
-    getJson<any>('/api/audit-log?page=1&limit=6'),
-    getJson<any>('/api/analyze-document', { method: 'POST', body: JSON.stringify({ title: 'AI Strategy Brief', text: 'Policy sign-off by 18 Mar 2026. Vendor review on 4 Apr 2026. Stakeholders include Strategy Office and Legal Compliance.', purpose: 'policy' }) }),
-    getJson<any>('/api/metrics-summary'),
-  ]);
+export default function DashboardPage() {
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-demo-role': document.cookie.match(/sca_role=([^;]+)/i)?.[1] || 'Viewer',
+      };
+      const [backlog, risk, audit, doc, metrics] = await Promise.all([
+        fetch(apiUrl('/api/scan-backlog'), { method: 'POST', headers, body: JSON.stringify({ source: 'institutional-demo' }) }).then(r => r.json()),
+        fetch(apiUrl('/api/risk-flag'), { method: 'POST', headers, body: JSON.stringify({ scope: 'council-operations' }) }).then(r => r.json()),
+        fetch(apiUrl('/api/audit-log?page=1&limit=6'), { headers }).then(r => r.json()),
+        fetch(apiUrl('/api/analyze-document'), { method: 'POST', headers, body: JSON.stringify({ title: 'AI Strategy Brief', text: 'Policy sign-off by 18 Mar 2026. Vendor review on 4 Apr 2026. Stakeholders include Strategy Office and Legal Compliance.', purpose: 'policy' }) }).then(r => r.json()),
+        fetch(apiUrl('/api/metrics-summary'), { headers }).then(r => r.json()),
+      ]);
+      setData({ backlog, risk, audit, doc, metrics });
+    };
+    run();
+  }, []);
+
+  if (!data) {
+    return <div className="text-sm text-white/70">Loading dashboard...</div>;
+  }
+
+  const { backlog, risk, audit, doc, metrics } = data;
 
   return (
     <div className="grid gap-6">

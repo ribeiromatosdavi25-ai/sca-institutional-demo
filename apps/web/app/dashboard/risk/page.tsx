@@ -1,16 +1,33 @@
-﻿export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+﻿'use client';
 
-import { getJson } from '../_lib/api';
+import { useEffect, useState } from 'react';
+import { apiUrl } from '../_lib/api';
 import { SectionCard } from '../_components/ui';
 import { ExportButtons } from '../_components/export-buttons';
 import { RoleTag } from '../_components/role-tag';
 
-export default async function RiskPage() {
-  const data = await getJson<any>('/api/risk-flag', {
-    method: 'POST',
-    body: JSON.stringify({ scope: 'enterprise-risk' }),
-  });
+export default function RiskPage() {
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-demo-role': document.cookie.match(/sca_role=([^;]+)/i)?.[1] || 'Viewer',
+      };
+      const response = await fetch(apiUrl('/api/risk-flag'), {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ scope: 'enterprise-risk' }),
+      });
+      setData(await response.json());
+    };
+    run();
+  }, []);
+
+  if (!data) {
+    return <div className="text-sm text-white/70">Loading risk flags...</div>;
+  }
 
   return (
     <SectionCard title="Risk Flags & Timeline">
