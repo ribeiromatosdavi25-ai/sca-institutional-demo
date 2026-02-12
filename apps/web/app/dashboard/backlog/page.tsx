@@ -4,7 +4,7 @@ import { ExportButtons } from '../_components/export-buttons';
 import { RoleTag } from '../_components/role-tag';
 
 export default async function BacklogPage() {
-  const data = await getJson('/api/scan-backlog', {
+  const data = await getJson<any>('/api/scan-backlog', {
     method: 'POST',
     body: JSON.stringify({ source: 'institutional-backlog' }),
   });

@@ -19,7 +19,7 @@ export default function AuditPage() {
       },
     });
     const payload = await response.json();
-    setData(payload);
+    setData(payload as any);
     setPage(nextPage);
   };
 

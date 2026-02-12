@@ -25,7 +25,7 @@ export default function DocumentPage() {
         }),
       });
       const payload = await response.json();
-      setData(payload);
+      setData(payload as any);
       setReviewed(false);
     };
     run();

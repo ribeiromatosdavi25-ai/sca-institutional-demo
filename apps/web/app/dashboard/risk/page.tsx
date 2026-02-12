@@ -4,7 +4,7 @@ import { ExportButtons } from '../_components/export-buttons';
 import { RoleTag } from '../_components/role-tag';
 
 export default async function RiskPage() {
-  const data = await getJson('/api/risk-flag', {
+  const data = await getJson<any>('/api/risk-flag', {
     method: 'POST',
     body: JSON.stringify({ scope: 'enterprise-risk' }),
   });

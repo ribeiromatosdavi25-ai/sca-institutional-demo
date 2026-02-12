@@ -3,11 +3,11 @@ import { AuditLogTable, BacklogCard, DocumentSummaryCard, RiskPanel } from './_c
 
 export default async function DashboardPage() {
   const [backlog, risk, audit, doc, metrics] = await Promise.all([
-    getJson('/api/scan-backlog', { method: 'POST', body: JSON.stringify({ source: 'institutional-demo' }) }),
-    getJson('/api/risk-flag', { method: 'POST', body: JSON.stringify({ scope: 'council-operations' }) }),
-    getJson('/api/audit-log?page=1&limit=6'),
-    getJson('/api/analyze-document', { method: 'POST', body: JSON.stringify({ title: 'AI Strategy Brief', text: 'Policy sign-off by 18 Mar 2026. Vendor review on 4 Apr 2026. Stakeholders include Strategy Office and Legal Compliance.', purpose: 'policy' }) }),
-    getJson('/api/metrics-summary'),
+    getJson<any>('/api/scan-backlog', { method: 'POST', body: JSON.stringify({ source: 'institutional-demo' }) }),
+    getJson<any>('/api/risk-flag', { method: 'POST', body: JSON.stringify({ scope: 'council-operations' }) }),
+    getJson<any>('/api/audit-log?page=1&limit=6'),
+    getJson<any>('/api/analyze-document', { method: 'POST', body: JSON.stringify({ title: 'AI Strategy Brief', text: 'Policy sign-off by 18 Mar 2026. Vendor review on 4 Apr 2026. Stakeholders include Strategy Office and Legal Compliance.', purpose: 'policy' }) }),
+    getJson<any>('/api/metrics-summary'),
   ]);
 
   return (

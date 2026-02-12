@@ -3,7 +3,7 @@ import { SectionCard } from '../_components/ui';
 import { RoleTag } from '../_components/role-tag';
 
 export default async function MetricsPage() {
-  const data = await getJson('/api/metrics-summary');
+  const data = await getJson<any>('/api/metrics-summary');
 
   return (
     <SectionCard title="KPI Metrics Summary">
