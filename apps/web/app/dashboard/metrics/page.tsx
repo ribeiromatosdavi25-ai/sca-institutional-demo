@@ -1,4 +1,7 @@
-﻿import { getJson } from '../_lib/api';
+﻿export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+import { getJson } from '../_lib/api';
 import { SectionCard } from '../_components/ui';
 import { RoleTag } from '../_components/role-tag';
 
