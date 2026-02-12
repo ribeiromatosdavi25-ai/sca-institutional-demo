@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* CHANGE: global depth system + tokens */
+:root {
+  /* CHANGE: neutral institutional tokens */
+  --bg-base: #0b0c0f;
+  --glass-surface: rgba(255,255,255,0.04);
+  --glass-surface-strong: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.08);
+  --shadow-soft: 0 8px 30px rgba(0,0,0,0.45);
+  --shadow-elevated: 0 20px 60px rgba(0,0,0,0.55);
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+}
+
+html, body {
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* CHANGE: institutional vertical gradient background */
+  background:
+    radial-gradient(ellipse at top center, rgba(40,40,50,0.35), transparent 50%),
+    linear-gradient(
+      to bottom,
+      #0b0c0f 0%,
+      #111216 30%,
+      #14161c 60%,
+      #0f1014 100%
+    );
+  background-attachment: fixed;
+  color: #f8fafc;
+}
+
+/* CHANGE: subtle scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
+
+/* CHANGE: subtle noise overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+/* Scrollbar global */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #222 transparent;
+}

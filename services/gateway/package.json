@@ -1,0 +1,29 @@
+{
+  "name": "@companion/gateway",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "pnpm exec tsc",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@companion/shared": "workspace:*",
+    "@companion/router": "workspace:*",
+    "@companion/resolver-offline": "workspace:*",
+    "@companion/resolver-cache": "workspace:*",
+    "@companion/resolver-external": "workspace:*",
+    "@companion/orchestrator": "workspace:*",
+    "cors": "^2.8.5",
+    "express": "^4.18.0",
+    "http-proxy-middleware": "^3.0.3",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.0",
+    "tsx": "^4.7.0"
+  }
+}

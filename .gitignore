@@ -1,0 +1,28 @@
+﻿# build artifacts
+node_modules/
+.pnpm-debug.log
+
+# next
+.next/
+out/
+
+# env
+.env
+.env.*
+
+# dist/build
+**/dist/
+**/*.tsbuildinfo
+
+# logs
+*.log
+
+# misc
+.DS_Store
+
+# local docs
+CHATGPT_INFO.md
+CHATGPT_INFO.txt
+
+# cache
+.pnpm-store/

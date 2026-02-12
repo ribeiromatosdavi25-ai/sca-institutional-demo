@@ -1,0 +1,23 @@
+{
+  "name": "companion",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "services/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "concurrently \"cross-env PORT=3002 pnpm --filter gateway dev\" \"cross-env NEXT_PUBLIC_GATEWAY_URL=http://localhost:3002 pnpm --filter web dev --port 3000\"",
+    "dev:dual": "concurrently \"cross-env PORT=3002 pnpm --filter gateway dev\" \"cross-env NEXT_PUBLIC_GATEWAY_URL=http://localhost:3002 pnpm --filter web dev --port 3001\"",
+    "dev:web-3001": "cross-env NEXT_PUBLIC_GATEWAY_URL=http://localhost:3002 pnpm --filter web dev --port 3001",
+    "start": "pnpm --filter web build && cross-env NODE_ENV=production PORT=3000 pnpm --filter gateway start",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.3.0"
+  }
+}

@@ -1,0 +1,30 @@
+﻿const BASE = (process.env.NEXT_PUBLIC_GATEWAY_URL || '').replace(/\/$/, '');
+
+export function apiUrl(path: string) {
+  return BASE ? `${BASE}${path}` : path;
+}
+
+const getRoleHeader = () => {
+  if (typeof window === 'undefined') {
+    // CHANGE: avoid cookies in server components to keep static rendering
+    return 'Viewer';
+  }
+  const match = document.cookie.match(/sca_role=([^;]+)/i);
+  return match?.[1] || 'Viewer';
+};
+
+export async function getJson<T>(path: string, init?: RequestInit) {
+  const response = await fetch(apiUrl(path), {
+    cache: 'no-store',
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-demo-role': getRoleHeader(),
+      ...(init?.headers || {}),
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json() as Promise<T>;
+}

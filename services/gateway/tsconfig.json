@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../../shared" },
+    { "path": "../router" },
+    { "path": "../resolver/offline" },
+    { "path": "../resolver/cache" },
+    { "path": "../resolver/external" },
+    { "path": "../orchestrator/models" }
+  ]
+}
