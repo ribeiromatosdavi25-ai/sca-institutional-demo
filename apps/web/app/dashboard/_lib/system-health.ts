@@ -32,8 +32,11 @@ type MachineOptions = {
   degradedLatencyMs: number;
   fetchFn: (input: string, init?: RequestInit) => Promise<HealthResponse>;
   nowFn: () => number;
-  setIntervalFn: typeof setInterval;
-  clearIntervalFn: typeof clearInterval;
+  setIntervalFn: (
+    handler: () => void,
+    timeout: number
+  ) => ReturnType<typeof setInterval>;
+  clearIntervalFn: (timer: ReturnType<typeof setInterval>) => void;
   logFn: (message: string) => void;
 };
 
@@ -61,10 +64,8 @@ export function createSystemHealthMachine(customOptions: Partial<MachineOptions>
     fetchFn: (input, init) =>
       globalThis.fetch(input, init) as Promise<HealthResponse>,
     nowFn: () => Date.now(),
-    setIntervalFn: (handler, timeout) =>
-      globalThis.setInterval(handler, timeout),
-    clearIntervalFn: (timer) =>
-      globalThis.clearInterval(timer),
+    setIntervalFn: (handler, timeout) => globalThis.setInterval(handler, timeout),
+    clearIntervalFn: (timer) => globalThis.clearInterval(timer),
     logFn: (message) => console.info(message),
     ...customOptions,
   };
