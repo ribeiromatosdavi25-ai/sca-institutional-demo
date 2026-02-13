@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useState } from 'react';
-import { apiUrl } from '../_lib/api';
+import { fetchJson } from '../_lib/api';
 import { SectionCard } from '../_components/ui';
 import { ExportButtons } from '../_components/export-buttons';
 import { RoleTag } from '../_components/role-tag';
@@ -15,12 +15,23 @@ export default function RiskPage() {
         'Content-Type': 'application/json',
         'x-demo-role': document.cookie.match(/sca_role=([^;]+)/i)?.[1] || 'Viewer',
       };
-      const response = await fetch(apiUrl('/api/risk-flag'), {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ scope: 'enterprise-risk' }),
-      });
-      setData(await response.json());
+      try {
+        const response = await fetchJson('/api/risk-flag', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ scope: 'enterprise-risk' }),
+        });
+        setData(response);
+      } catch {
+        // CHANGE: fallback data when API is unavailable
+        setData({
+          flags: [
+            { id: 'RSK-08', label: 'SLA breach risk', urgency: 'critical', deadline: '2026-02-28', risk_score: 0.92, rationale: 'Predictive signal derived from backlog velocity and SLA thresholds.' },
+            { id: 'RSK-11', label: 'Evidence backlog exceeds threshold', urgency: 'high', deadline: '2026-03-05', risk_score: 0.78, rationale: 'Predictive signal derived from backlog velocity and SLA thresholds.' },
+          ],
+          permissions: { role: 'Viewer' },
+        });
+      }
     };
     run();
   }, []);

@@ -8,6 +8,29 @@ export function apiUrl(path: string) {
   return BASE ? `${BASE}${path}` : path;
 }
 
+async function tryFetchJson<T>(url: string, init?: RequestInit) {
+  const response = await fetch(url, {
+    cache: 'no-store',
+    ...init,
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json() as Promise<T>;
+}
+
+export async function fetchJson<T>(path: string, init?: RequestInit) {
+  const primary = apiUrl(path);
+  try {
+    return await tryFetchJson<T>(primary, init);
+  } catch (error) {
+    if (primary !== path) {
+      return await tryFetchJson<T>(path, init);
+    }
+    throw error;
+  }
+}
+
 const getRoleHeader = () => {
   if (typeof window === 'undefined') {
     // CHANGE: avoid cookies in server components to keep static rendering
@@ -18,8 +41,7 @@ const getRoleHeader = () => {
 };
 
 export async function getJson<T>(path: string, init?: RequestInit) {
-  const response = await fetch(apiUrl(path), {
-    cache: 'no-store',
+  return fetchJson<T>(path, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
@@ -27,8 +49,4 @@ export async function getJson<T>(path: string, init?: RequestInit) {
       ...(init?.headers || {}),
     },
   });
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return response.json() as Promise<T>;
 }

@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useState } from 'react';
-import { apiUrl } from '../_lib/api';
+import { fetchJson } from '../_lib/api';
 
 type StatusState = 'online' | 'offline';
 
@@ -13,9 +13,7 @@ export function SystemStatus() {
 
     const fetchStatus = async () => {
       try {
-        const response = await fetch(apiUrl('/api/system-status'));
-        if (!response.ok) throw new Error('status');
-        const data = await response.json();
+        const data = await fetchJson<{ status: StatusState }>('/api/system-status');
         if (active) {
           setStatus(data.status === 'online' ? 'online' : 'offline');
         }
