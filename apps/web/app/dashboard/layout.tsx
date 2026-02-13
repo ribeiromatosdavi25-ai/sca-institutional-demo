@@ -3,6 +3,7 @@ import { Banner, GovernanceTags, FooterNote } from './_components/ui';
 import { RoleSelector } from './_components/role-selector';
 import { Breadcrumbs, NavLink } from './_components/nav';
 import { SystemStatus } from './_components/SystemStatus';
+import { SystemStatusBarChip } from './_components/SystemStatusBarChip';
 import { AIServicesPanel } from './_components/ai-services-panel';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
@@ -30,7 +31,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* CHANGE: system status bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/70">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-emerald-200">System &gt; Online</span>
+            <SystemStatusBarChip />
             <span className="rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1 text-sky-200">Ethics: Human-in-loop</span>
             <span className="rounded-full border border-amber-300/30 bg-amber-400/10 px-3 py-1 text-amber-200">Oversight: Required</span>
           </div>
