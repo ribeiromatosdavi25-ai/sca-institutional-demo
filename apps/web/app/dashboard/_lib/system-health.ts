@@ -58,10 +58,13 @@ const DEFAULTS = {
 export function createSystemHealthMachine(customOptions: Partial<MachineOptions> = {}) {
   const options: MachineOptions = {
     ...DEFAULTS,
-    fetchFn: (input, init) => fetch(input, init) as Promise<HealthResponse>,
+    fetchFn: (input, init) =>
+      globalThis.fetch(input, init) as Promise<HealthResponse>,
     nowFn: () => Date.now(),
-    setIntervalFn: setInterval,
-    clearIntervalFn: clearInterval,
+    setIntervalFn: (handler, timeout) =>
+      globalThis.setInterval(handler, timeout),
+    clearIntervalFn: (timer) =>
+      globalThis.clearInterval(timer),
     logFn: (message) => console.info(message),
     ...customOptions,
   };
@@ -266,12 +269,11 @@ export function getSystemHealthMachine() {
   return scope.__scaSystemHealthMachine;
 }
 
-const defaultMachine = getSystemHealthMachine();
-
 export function useSystemHealth() {
+  const machine = getSystemHealthMachine();
   return useSyncExternalStore(
-    defaultMachine.subscribe,
-    defaultMachine.getSnapshot,
-    defaultMachine.getSnapshot
+    machine.subscribe,
+    machine.getSnapshot,
+    machine.getSnapshot
   );
 }
