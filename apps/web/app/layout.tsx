@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Companion System',
-  description: 'Offline-first deterministic assistant',
+  title: 'SCA Institutional Platform',
+  description: 'Secure AI Operations Infrastructure',
 };
 
 export default function RootLayout({

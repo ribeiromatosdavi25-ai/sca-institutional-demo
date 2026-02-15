@@ -1,14 +1,21 @@
-﻿import type { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { Banner, GovernanceTags, FooterNote } from './_components/ui';
 import { RoleSelector } from './_components/role-selector';
 import { Breadcrumbs, NavLink } from './_components/nav';
 import { SystemStatus } from './_components/SystemStatus';
 import { SystemStatusBarChip } from './_components/SystemStatusBarChip';
 import { AIServicesPanel } from './_components/ai-services-panel';
+import { SessionGuard } from './_components/session-guard';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const cookieStore = cookies();
+  const accessRole = cookieStore.get('sca_access_role')?.value;
+  const dashboardRole = cookieStore.get('sca_role')?.value;
+
   return (
-    <div className="min-h-screen w-full text-slate-100 overflow-y-auto">
+    <div className="min-h-screen w-full overflow-y-auto text-slate-100">
       {/* CHANGE: institutional shell */}
       <div className="mx-auto flex min-h-screen w-[min(1200px,92vw)] flex-col gap-6 py-6 md:py-8">
         <header className="rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[var(--glass-surface)] px-6 py-5 shadow-[var(--shadow-soft)]">
@@ -23,6 +30,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               {/* CHANGE: AI services modal trigger */}
               <AIServicesPanel />
               <RoleSelector />
+              <SessionGuard accessRole={accessRole} dashboardRole={dashboardRole} />
+              <Link
+                href="/logout"
+                className="rounded-full border border-rose-300/30 bg-rose-500/10 px-3 py-1 text-xs text-rose-100 transition hover:bg-rose-500/20"
+              >
+                Sign Out
+              </Link>
               <GovernanceTags />
             </div>
           </div>
